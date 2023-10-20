@@ -14,5 +14,11 @@ connection-string: "./storage/strorage.db"
 ### Fields
 
 `port` - address to bind
-`env`  - enviroment tag
+
+`env`  - enviroment tag (affect to logging level)
+
 `connection-string` - path to sqlite3 db file
+
+### Build
+
+run `make` command to build a project to executable file. After successfuly builded executable file will be located in root directory
