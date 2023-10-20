@@ -1,6 +1,10 @@
 package dbstore
 
-import "github.com/tehrelt/url-shortener/internal/app/model"
+import (
+	"fmt"
+
+	"github.com/tehrelt/url-shortener/internal/app/model"
+)
 
 type AliasRepository struct {
 	store *Store
@@ -37,8 +41,39 @@ func (r *AliasRepository) Find(alias string) (*model.Alias, error) {
 }
 
 func (r *AliasRepository) Delete(alias string) error {
-	return r.store.db.QueryRow(
-		"DELETE FROM aliases WHERE alias = $1",
-		alias,
-	).Err()
+
+	fmt.Printf("delete an alias: %s", alias)
+
+	stmt, err := r.store.db.Prepare("DELETE FROM aliases WHERE alias = ?")
+	if err != nil {
+		return err
+	}
+
+	if _, err := stmt.Exec(alias); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *AliasRepository) GetAll() ([]model.Alias, error) {
+	var aliases []model.Alias
+
+	rows, err := r.store.db.Query("SELECT id, alias, url FROM aliases")
+	if err != nil {
+		return nil, err
+	}
+
+	var t model.Alias
+	for rows.Next() {
+		rows.Scan(&t.ID, &t.Alias, &t.URL)
+
+		aliases = append(aliases, model.Alias{
+			ID:    t.ID,
+			Alias: t.Alias,
+			URL:   t.URL,
+		})
+	}
+
+	return aliases, nil
 }

@@ -61,12 +61,36 @@ func (s *server) configureRouter() {
 	s.router.Use(middleware.CommonMiddleware)
 	s.router.Use(handlers.CORS(handlers.AllowedOrigins([]string{"*"})))
 
+	s.router.HandleFunc("/urls", s.handleAliases()).Methods("GET")
 	s.router.HandleFunc("/{alias}", s.handleAlias()).Methods("GET")
 
-	url := s.router.PathPrefix("/url").Subrouter()
+	url := s.router.PathPrefix("/alias").Subrouter()
 	url.HandleFunc("/", s.handleCreateAlias()).Methods("POST")
 	url.HandleFunc("/{alias}", s.handleGetAlias()).Methods("GET")
 	url.HandleFunc("/{alias}", s.handleDeleteAlias()).Methods("DELETE")
+}
+
+func (s *server) handleAliases() http.HandlerFunc {
+	type response struct {
+		Count int           `json:"count"`
+		Data  []model.Alias `json:"data"`
+	}
+
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		data, err := s.store.Alias().GetAll()
+		if err != nil {
+			s.error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		re := response{
+			Data:  data,
+			Count: len(data),
+		}
+
+		s.respond(w, r, http.StatusOK, re)
+	}
 }
 
 func (s *server) handleCreateAlias() http.HandlerFunc {
