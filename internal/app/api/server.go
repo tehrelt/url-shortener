@@ -117,7 +117,6 @@ func (s *server) handleCreateAlias() http.HandlerFunc {
 		e := s.logger.With(
 			slog.Any("alias", a),
 		)
-		e.Debug("created alias")
 
 		if err := s.store.Alias().Create(a); err != nil {
 			e.Debug("cant create an alias", slog.Any("err", err))
@@ -170,6 +169,7 @@ func (s *server) handleAlias() http.HandlerFunc {
 			s.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
+		e.Debug("succesfully incremented visit counter")
 
 		e.Debug("successfuly redirecting to url", slog.String("url", a.URL))
 		http.Redirect(w, r, a.URL, http.StatusSeeOther)
@@ -177,11 +177,6 @@ func (s *server) handleAlias() http.HandlerFunc {
 }
 
 func (s *server) handleDeleteAlias() http.HandlerFunc {
-	type request struct {
-		Url   string `json:"url"`
-		Alias string `json:"alias,omitempty"`
-	}
-
 	return func(w http.ResponseWriter, r *http.Request) {
 		alias := mux.Vars(r)["alias"]
 

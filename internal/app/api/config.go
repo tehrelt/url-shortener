@@ -13,7 +13,6 @@ type Config struct {
 }
 
 func NewConfig(configPath string) *Config {
-
 	var config Config
 
 	if err := cleanenv.ReadConfig(configPath, &config); err != nil {
