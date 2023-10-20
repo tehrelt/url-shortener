@@ -19,6 +19,6 @@ connection-string: "./storage/strorage.db"
 
 `connection-string` - path to sqlite3 db file
 
-### Build
+## Build
 
 run `make` command to build a project to executable file. After successfuly builded executable file will be located in root directory
