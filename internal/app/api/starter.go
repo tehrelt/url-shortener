@@ -31,7 +31,8 @@ func setupDataBase(dbURL string) (*sql.DB, error) {
 		`CREATE TABLE IF NOT EXISTS aliases (
 			id integer primary key autoincrement,
 			alias text unique not null,
-			url text not null
+			url text not null,
+			visits integer
 		);
 		CREATE INDEX IF NOT EXISTS idx_alias ON aliases(alias);`,
 	)

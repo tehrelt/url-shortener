@@ -8,4 +8,6 @@ type AliasRepository interface {
 	Delete(alias string) error
 
 	GetAll() ([]model.Alias, error)
+
+	IncrementVisit(alias string) error
 }

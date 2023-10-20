@@ -8,9 +8,10 @@ import (
 )
 
 type Alias struct {
-	ID    int    `json:"id"`
-	URL   string `json:"url"`
-	Alias string `json:"alias"`
+	ID     int    `json:"id"`
+	URL    string `json:"url"`
+	Alias  string `json:"alias"`
+	Visits int    `json:"visits,omitempty"`
 }
 
 func (a *Alias) Validate() error {
