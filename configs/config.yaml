@@ -1,2 +1,3 @@
-port: 8080
+port: "localhost:8080"
 env: "prod"
+connection-string: "./storage/strorage.db"

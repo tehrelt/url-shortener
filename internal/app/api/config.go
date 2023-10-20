@@ -1,4 +1,4 @@
-package urlshortener
+package api
 
 import (
 	"log"
@@ -7,8 +7,9 @@ import (
 )
 
 type Config struct {
-	Port string `yaml:"port"`
-	Env  string `yaml:"env"`
+	Port             string `yaml:"port"`
+	Env              string `yaml:"env"`
+	ConnectionString string `yaml:"connection-string"`
 }
 
 func NewConfig(configPath string) *Config {
@@ -16,7 +17,7 @@ func NewConfig(configPath string) *Config {
 	var config Config
 
 	if err := cleanenv.ReadConfig(configPath, &config); err != nil {
-		log.Fatalf("cannot read config: %w", err)
+		log.Fatal(err)
 	}
 
 	return &config

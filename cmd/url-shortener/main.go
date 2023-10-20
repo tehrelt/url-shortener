@@ -4,7 +4,7 @@ import (
 	"flag"
 	"log"
 
-	urlshortener "github.com/tehrelt/url-shortener/internal/url-shortener"
+	"github.com/tehrelt/url-shortener/internal/app/api"
 )
 
 var (
@@ -18,15 +18,9 @@ func init() {
 func main() {
 	flag.Parse()
 
-	config := urlshortener.NewConfig(configPath)
+	config := api.NewConfig(configPath)
 
-	log.Println("init config completed")
-	log.Println(config)
-
-	server := urlshortener.New(config)
-	server.Logger.Info("info log")
-	server.Logger.Debug("debug log")
-	server.Logger.Error("error log")
-
-	server.Start()
+	if err := api.Start(config); err != nil {
+		log.Fatal(err)
+	}
 }
